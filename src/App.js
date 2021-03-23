@@ -1,24 +1,36 @@
-import logo from './logo.svg';
+import React,{useState,useEffect} from 'react'
+import {Container,Row,Col} from 'reactstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
+import Axios from 'axios'
+import MyCard from './MyCard'
 
 function App() {
+
+  const [details , setDetails] = useState({})
+  //to get requset in asynchronous format (invisible) remember async and await
+  const fetchDetails = async () => {
+    const response = await Axios.get('https://randomuser.me/api/')
+    console.log('RESPONSE: ',response.data)
+
+    const details = response.data.results[0]
+
+    setDetails(details)
+
+  }
+
+useEffect(() => {
+  fetchDetails()
+},[])  
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container fluid className='p-4 bg-primary App'>
+      <Row>
+        <Col md={4} className='offset-md-4 mt-4'>
+          <MyCard details={details}/>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 
